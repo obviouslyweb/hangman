@@ -1,6 +1,6 @@
 ## Overview
 
-**Project Title**: 
+**Project Title**: Hangman
 
 **Project Description**:
 
@@ -40,6 +40,6 @@ I found these websites useful in developing this software:
 
 The following items I plan to fix, improve, and/or add to this project in the future:
 
-* [ ] First thing here
-* [ ]
-* [ ]
+* [ ] Fix letters counting as a guess even if they don't match requirements ("in" counts as "i" despite needing to be ignored)
+* [ ] Add in game win logic & max guess requirement
+* [ ] Add in multiple word lists selection feature
