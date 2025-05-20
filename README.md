@@ -41,5 +41,4 @@ I found these websites useful in developing this software:
 The following items I plan to fix, improve, and/or add to this project in the future:
 
 * [ ] Add in multiple word lists selection feature
-* [ ] Add in guess max change rule
-* [ ] Update formatting / style of main game loop
+* [ ] Add in ability to create custom word lists
