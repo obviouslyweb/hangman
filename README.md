@@ -40,8 +40,6 @@ I found these websites useful in developing this software:
 
 The following items I plan to fix, improve, and/or add to this project in the future:
 
-* [ ] Add post game screen
-* [ ] Add max guess requirement
 * [ ] Add in multiple word lists selection feature
 * [ ] Add in guess max change rule
-* [ ] Update formatting / style
+* [ ] Update formatting / style of main game loop
