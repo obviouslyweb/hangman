@@ -4,31 +4,73 @@ use rand::Rng; // Obtain library for random number generation
 
 fn main() {
 
-    // TO DO: Add menu system using match, https://www.w3schools.com/rust/rust_match.php
-    
-    let words = vec!["apple", "banana", "pear", "pineapple", "grape"]; // Define word array
-    
-    let chosen_word = obtainword(&words); // Choose random word from array
+    let mut program_active = true;
 
-    println!("The chosen word is {}", chosen_word); // Print word to user
+    while program_active == true {
+        println!("Main Menu\n0) Quit program\n1) Start game\n2) Change list");
 
-    let running = true; // Set running bool for game loop
+        let mut input = String::new();
 
-    let mut guess = String::new(); // Create guess variable
-    
-    let mut guessed: Vec<char> = Vec::new(); // Create vector for used letters
+        io::stdin().read_line(&mut input).expect("Failed to read line");
 
-    while running {
+        let menu_choice: i32 = match input.trim().parse() {
+            Ok(num) => num,
+            Err(_) => {
+                println!("Invalid input. Please enter a number.");
+                continue;
+            }
+        };
+
+        match menu_choice {
+            0 => program_active = false,
+            1 => gameloop(),
+            2 => println!("Coming soon!"),
+            _ => println!("Unacceptable input."),
+        }
+    }
+}
+
+fn gameloop() {
+    let words = vec!["apple", "banana", "pear", "pineapple", "grape"];
+    let chosen_word = obtainword(&words); 
+    let mut guessed: Vec<char> = Vec::new();
+
+    loop {
+        // Display word & already guessed letters
         displayword(chosen_word, &guessed);
+        if !guessed.is_empty() {
+            print!("Guessed letters: ");
+            displayguessed(&guessed);
+        }
+        
+        let mut guess = String::new();
 
-        println!("Guess the word!");
+        println!("Guess a letter: ");
+
+        // Obtain user guess
+        io::stdin().read_line(&mut guess).expect("Failed to read line");
         
-        let mut user_input = String::new();
-        
-        io::stdin()
-            .read_line(&mut guess)
-            .expect("Failed to read line");
-        println!("You said: {}", guess);
+        let trimmed = guess.trim();
+
+        if trimmed.len() != 1 {
+            println!("Only type one letter.");
+        }
+
+        let letter = trimmed.chars().next().unwrap();
+
+        if !letter.is_alphabetic() {
+            println!("Please enter a valid letter (a-z).");
+            continue;
+        }
+
+        if guessed.contains(&letter) {
+            println!("You've already guessed '{}'. Try a new letter.", letter);
+            continue;
+        }
+
+        guessed.push(letter);
+
+        // TO DO: Check if word is fully guessed, and end game if so
     }
 }
 
@@ -39,20 +81,24 @@ fn obtainword<'a>(words: &'a [&str]) -> &'a str {
     return words[num]
 }
 
-fn displayword<'a>(word: &str, guessed: &Vec<char>) {
-    let completed = true;
-    for character in 0..word.len() {
-        for guess in guessed {
-            // if character == guess { Checks to see used letters, NEED TO FIX CHARACTER COMPARISON
-                // ADD: Any used letters are displayed, if in the word
-            // } else {
-
-            // }
+fn displayword(word: &str, guessed: &Vec<char>) {
+    for character in word.chars() {
+        if guessed.contains(&character) {
+            print!("{} ", character)
+        } else {
+            print!("_ ");
         }
     }
-    if completed == true {
-        // ADD: If all letters are displayed (check), game ends
-    }
+    println!();
 }
 
+fn displayguessed(guessed: &Vec<char>) {
+    for (i, element) in guessed.iter().enumerate() {
+        if i == guessed.len() - 1{
+            println!("{}", element);
+        } else {
+            print!("{}, ", element);
+        }
+    }
+}
 // Type "cargo run" in terminal to run
