@@ -69,8 +69,6 @@ fn gameloop() {
         }
 
         guessed.push(letter);
-
-        // TO DO: Check if word is fully guessed, and end game if so
     }
 }
 
