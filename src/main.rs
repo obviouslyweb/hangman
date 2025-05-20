@@ -45,7 +45,7 @@ fn gameloop(lives: i32) {
 
     clearscreen::clear().expect("failed to clear screen");
     
-    let words = vec!["apple", "banana", "pear", "pineapple", "grape"];
+    let words = vec!["apple", "banana", "pear", "pineapple", "grape", "blackberry", "guava", "peach", "orange"];
     let chosen_word = obtainword(&words); 
     let mut activelives = lives;
     let mut guessed: Vec<char> = Vec::new();
