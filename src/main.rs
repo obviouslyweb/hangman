@@ -36,8 +36,13 @@ fn gameloop() {
     let mut guessed: Vec<char> = Vec::new();
 
     loop {
-        // Display word & already guessed letters
-        displayword(chosen_word, &guessed);
+        // Display word, check for completion
+        let completed = displayword(chosen_word, &guessed);
+        if completed {
+            break;
+        }
+        
+        // Display already guessed letters
         if !guessed.is_empty() {
             print!("Guessed letters: ");
             displayguessed(&guessed);
@@ -54,6 +59,7 @@ fn gameloop() {
 
         if trimmed.len() != 1 {
             println!("Only type one letter.");
+            continue;
         }
 
         let letter = trimmed.chars().next().unwrap();
@@ -79,15 +85,22 @@ fn obtainword<'a>(words: &'a [&str]) -> &'a str {
     return words[num]
 }
 
-fn displayword(word: &str, guessed: &Vec<char>) {
+fn displayword(word: &str, guessed: &Vec<char>) -> bool {
+    let mut completed = true;
     for character in word.chars() {
         if guessed.contains(&character) {
             print!("{} ", character)
         } else {
             print!("_ ");
+            completed = false;
         }
     }
     println!();
+    if completed {
+        return true;
+    } else {
+        return false;
+    }
 }
 
 fn displayguessed(guessed: &Vec<char>) {
