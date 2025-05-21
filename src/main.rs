@@ -2,10 +2,20 @@ use std::io; // Obtain library for input/output
 
 use rand::Rng; // Obtain library for random number generation
 
+// Define WordList structure
+struct WordList {
+        name: String,
+        words: Vec<String>
+    }
+
 fn main() {
 
+    // Clear screen
     clearscreen::clear().expect("failed to clear screen");
 
+    // Create word lists
+    let word_list = createwordlist();
+    let mut chosen_word_list = 0;
     let mut program_active = true;
     let mut lives = 6;
 
@@ -27,7 +37,10 @@ fn main() {
 
         match menu_choice {
             0 => program_active = false,
-            1 => gameloop(lives),
+            1 => {
+                clearscreen::clear().expect("failed to clear screen");
+                gameloop(lives, chosen_word_list, &word_list)
+            }
             2 => {
                 clearscreen::clear().expect("failed to clear screen");
                 println!("Functionality coming soon!\n");
@@ -41,12 +54,10 @@ fn main() {
     }
 }
 
-fn gameloop(lives: i32) {
+fn gameloop(lives: i32, chosen_word_list: usize, word_list: &Vec<WordList>) {
 
-    clearscreen::clear().expect("failed to clear screen");
-    
-    let words = vec!["apple", "banana", "pear", "pineapple", "grape", "blackberry", "guava", "peach", "orange"];
-    let chosen_word = obtainword(&words); 
+    println!("Starting game with word list theme '{}'...", &word_list[chosen_word_list].name);
+    let chosen_word = obtainword(&word_list[chosen_word_list].words);
     let mut activelives = lives;
     let mut guessed: Vec<char> = Vec::new();
     let gameendcondition: i32; // 0 = error, 1 = win, 2 = lose
@@ -131,11 +142,11 @@ fn gameloop(lives: i32) {
 
 }
 
-fn obtainword<'a>(words: &'a [&str]) -> &'a str {
+fn obtainword<'a>(words: &'a [String]) -> &'a str {
     // Choose random item from list
     let num = rand::thread_rng().gen_range(0..words.len());
     // Set word to item from vector
-    return words[num]
+    return &words[num]
 }
 
 fn displayword(word: &str, guessed: &Vec<char>) {
@@ -207,4 +218,25 @@ fn changelives(mut lives: i32) -> i32 {
 
     return lives;
 }
+
+fn changewords(current_words: &[&str]) {
+    println!("The current selected word list is {}", current_words[0]);
+    // Coming soon
+}
+
+fn createwordlist() -> Vec<WordList> {
+    return vec![
+        WordList {
+            name: "Fruits".to_string(),
+            words: vec!["apple", "apple", "banana", "pear", "pineapple", "grape", "blackberry", "guava", "peach", "orange"]
+            .iter().map(|s| s.to_string()).collect(),
+        },
+        WordList {
+            name: "Computers".to_string(),
+            words: vec!["macbook", "windows", "keyboard", "monitor", "speaker"]
+            .iter().map(|s| s.to_string()).collect(),
+        }  
+    ];
+}
+
 // Type "cargo run" in terminal to run
