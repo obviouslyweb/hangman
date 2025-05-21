@@ -1,6 +1,6 @@
 use std::{io}; // Obtain library for input/output
-use std::{thread, time}; // Sleep feature
 use rand::Rng; // Obtain library for random number generation
+use clearscreen;
 
 // Define WordList structure
 struct WordList {
@@ -20,7 +20,7 @@ fn main() {
     let mut lives = 6;
 
     while program_active == true {
-        println!("o<-< RUSTMAN Main Menu >->o\n0) Quit program\n1) Start game ({}, {} missed allowed)\n2) Word list settings\n3) Change allowed missed guesses", &word_lists[chosen_word_list].name, lives);
+        println!("o<-< RUSTMAN Main Menu >->o\n0) Quit program\n1) Start game ('{}', {} missed allowed)\n2) Word list settings\n3) Change allowed missed guesses", &word_lists[chosen_word_list].name, lives);
 
         let mut input = String::new();
 
@@ -54,7 +54,7 @@ fn main() {
                         }
                     }
                     
-                    println!("\n0) Return to main menu\n1) Change word list");
+                    println!("\n0) Return to main menu\n1) Change word list\n2) Create new word list");
 
                     let mut input = String::new();
 
@@ -73,6 +73,9 @@ fn main() {
                         0 => break,
                         1 => {
                             chosen_word_list = changewords(chosen_word_list, &word_lists);
+                        }
+                        2 => {
+                            addtowordlist(&mut word_lists);
                         }
                         _ => {
                             clearscreen::clear().expect("failed to clear screen");
@@ -93,11 +96,6 @@ fn main() {
 }
 
 fn gameloop(lives: i32, chosen_word_list: usize, word_list: &Vec<WordList>) {
-
-    // Game wait timer (disabled)
-    // println!("Starting game with word list theme '{}'...", &word_list[chosen_word_list].name);
-    // thread::sleep(time::Duration::from_millis(3000));
-    // clearscreen::clear().expect("failed to clear screen");
 
     let chosen_word = obtainword(&word_list[chosen_word_list].words);
     let mut activelives = lives;
@@ -314,6 +312,76 @@ fn changewords(mut current_word_list: usize, word_lists: &Vec<WordList>) -> usiz
 
     return current_word_list;
 
+}
+
+fn addtowordlist(all_lists: &mut Vec<WordList>) {
+    clearscreen::clear().expect("failed to clear screen");
+
+    // Get new list name
+    println!("Please enter a name for your new word list:");
+    let mut list_name = String::new();
+    io::stdin().read_line(&mut list_name).expect("Failed to read line");
+    clearscreen::clear().expect("failed to clear screen");
+
+    // Create string vector for holding added words
+    let mut words_to_add: Vec<String> = Vec::new();
+
+    // Get new list items
+    clearscreen::clear().expect("failed to clear screen");
+    loop {
+        println!("Please enter words for the new word list. Each entry will count as a new word.\nTo finish adding words, type '/'.\nCurrently added words: {:?}", words_to_add);
+        let mut new_list_item = String::new();
+        io::stdin().read_line(&mut new_list_item).expect("Failed to read line");
+        let trimmed = new_list_item.trim();
+        if trimmed != "/" {
+            if trimmed.is_empty() || !trimmed.chars().any(|c| c.is_alphabetic()) {
+                clearscreen::clear().expect("failed to clear screen");
+                println!("Input cannot be empty or only spaces. Please enter a valid word/phrase.");
+                continue;
+            }
+
+            let mut allowed_phrase = true;
+            for c in trimmed.chars() {
+                if !(char::is_alphabetic(c) || c == ' ') {
+                    allowed_phrase = false;
+                }
+            }
+            if allowed_phrase {
+                words_to_add.push(trimmed.to_string());
+                clearscreen::clear().expect("failed to clear screen");
+            } else {
+                clearscreen::clear().expect("failed to clear screen");
+                println!("'{}' is not an allowed word and was not added. Please only use alphabetical characters and spaces.", new_list_item.trim());
+            }
+        } else {
+            break;
+        }
+    }
+
+    if words_to_add.len() != 0 {
+
+        all_lists.push(WordList {
+                name: list_name.trim().to_string(),
+                words: words_to_add.iter().map(|s| s.to_string()).collect(),
+        });
+
+        clearscreen::clear().expect("failed to clear screen");
+        println!("Added list '{}' to word list options. You can play with this list by selecting it in the word list options menu.\n\n{} | {:?}\n\nPress ENTER to continue.", list_name.trim(), list_name.trim(), words_to_add);
+
+        // Press ENTER handler
+        let mut empty = String::new();
+        io::stdin().read_line(&mut empty).expect("Failed to read line");
+        clearscreen::clear().expect("failed to clear screen");
+
+    } else {
+        clearscreen::clear().expect("failed to clear screen");
+        println!("Provided list had no entries! No list was created.\nPress ENTER to continue.");
+
+        // Press ENTER handler
+        let mut empty = String::new();
+        io::stdin().read_line(&mut empty).expect("Failed to read line");
+        clearscreen::clear().expect("failed to clear screen");
+    }
 }
 
 fn createwordlist() -> Vec<WordList> {

@@ -40,7 +40,7 @@ I found these websites useful in developing this software:
 
 The following items I plan to fix, improve, and/or add to this project in the future:
 
-* [ ] Add in ability to create custom word lists
-* [ ] Add additional words to current list & more word lists
 * [ ] Finish documentation
+* [ ] Add additional words to current list & more word lists
 * [ ] Allow early game end
+* [ ] Add the ability to delete word lists
