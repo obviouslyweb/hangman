@@ -1,26 +1,26 @@
-use std::io; // Obtain library for input/output
+use std::{io, thread::current}; // Obtain library for input/output
 
 use rand::Rng; // Obtain library for random number generation
 
 // Define WordList structure
 struct WordList {
-        name: String,
-        words: Vec<String>
-    }
+    name: String,
+    words: Vec<String>
+}
 
 fn main() {
 
     // Clear screen
     clearscreen::clear().expect("failed to clear screen");
 
-    // Create word lists
+    // Create necessary variables (word list, chosen word list, active program, lives, etc.)
     let word_list = createwordlist();
     let mut chosen_word_list = 0;
     let mut program_active = true;
     let mut lives = 6;
 
     while program_active == true {
-        println!("o<-< RUSTMAN Main Menu >->o\n0) Quit program\n1) Start game\n2) Change list\n3) Change allowed missed guesses");
+        println!("o<-< RUSTMAN Main Menu >->o\n0) Quit program\n1) Start game ({})\n2) Word list settings\n3) Change allowed missed guesses", &word_list[chosen_word_list].name);
 
         let mut input = String::new();
 
@@ -42,8 +42,7 @@ fn main() {
                 gameloop(lives, chosen_word_list, &word_list)
             }
             2 => {
-                clearscreen::clear().expect("failed to clear screen");
-                println!("Functionality coming soon!\n");
+                chosen_word_list = changewords(chosen_word_list, &word_list);
             }
             3 => lives = changelives(lives),
             _ => {
@@ -153,6 +152,8 @@ fn displayword(word: &str, guessed: &Vec<char>) {
     for character in word.chars() {
         if guessed.contains(&character) {
             print!("{} ", character)
+        } else if character == ' ' {
+            print!("  ");
         } else {
             print!("_ ");
         }
@@ -164,7 +165,9 @@ fn checkword(word: &str, guessed: &Vec<char>) -> bool {
     let mut completed = true;
     for character in word.chars() {
         if !guessed.contains(&character) {
-            completed = false;
+            if character != ' ' {
+                completed = false;
+            }
         }
     }
     if completed {
@@ -219,24 +222,107 @@ fn changelives(mut lives: i32) -> i32 {
     return lives;
 }
 
-fn changewords(current_words: &[&str]) {
-    println!("The current selected word list is {}", current_words[0]);
-    // Coming soon
+fn changewords(mut current_word_list: usize, word_lists: &Vec<WordList>) -> usize {
+    loop {
+        clearscreen::clear().expect("failed to clear screen");
+        println!("The current selected word list is '{}'.", word_lists[current_word_list].name);
+        print!("It includes the following words: ");
+        for (i, word) in word_lists[current_word_list].words.iter().enumerate() {
+            if i == word_lists[current_word_list].words.len() - 1 {
+                println!("{}", word);
+            } else {
+                print!("{}, ", word);
+            }
+        }
+        
+        println!("\n0) Return to main menu\n1) Change word list");
+
+        let mut input = String::new();
+
+        io::stdin().read_line(&mut input).expect("Failed to read line");
+
+        let menu_choice: i32 = match input.trim().parse() {
+            Ok(num) => num,
+            Err(_) => {
+                clearscreen::clear().expect("failed to clear screen");
+                println!("Invalid input. Please enter a number.\n");
+                continue;
+            }
+        };
+
+        match menu_choice {
+            0 => break,
+            1 => {
+                clearscreen::clear().expect("failed to clear screen");
+
+                println!("The following are all the lists you can use:\n");
+
+                for (index, list) in word_lists.iter().enumerate() {
+                    print!("{}: {} | ", index + 1, list.name);
+                    for (i, word) in word_lists[index].words.iter().enumerate() {
+                    if i == word_lists[index].words.len() - 1 {
+                        print!("{}", word);
+                    } else {
+                        print!("{}, ", word);
+                    }
+                }
+                    println!();
+                }
+
+                println!("\nPlease input the number of the list you'd like to use.");
+
+                let mut new_list_input = String::new();
+
+                io::stdin().read_line(&mut new_list_input).expect("Failed to read line");
+
+                let list_choice: i32 = match new_list_input.trim().parse() {
+                    Ok(num) => num,
+                    Err(_) => {
+                        clearscreen::clear().expect("failed to clear screen");
+                        println!("Invalid input. Please enter a number.\n");
+                        continue;
+                    }
+                };
+
+                if list_choice > 0 && (list_choice as usize) <= word_lists.len() {
+                    let chosen_index = (list_choice - 1) as usize;
+                    println!("Chosen list: {}", word_lists[chosen_index].name);
+                    current_word_list = chosen_index;
+                } else {
+                    println!("Invalid selection; please choose a given index.");
+                }
+            }
+            _ => {
+                clearscreen::clear().expect("failed to clear screen");
+                println!("Unacceptable input; please choose a menu option.\n");
+            }
+        }
+    }
+
+    clearscreen::clear().expect("failed to clear screen");
+
+    return current_word_list;
+
 }
 
 fn createwordlist() -> Vec<WordList> {
     return vec![
         WordList {
             name: "Fruits".to_string(),
-            words: vec!["apple", "apple", "banana", "pear", "pineapple", "grape", "blackberry", "guava", "peach", "orange"]
+            words: vec!["apple", "banana", "pear", "pineapple", "grape", "blackberry", "guava", "peach", "orange"]
             .iter().map(|s| s.to_string()).collect(),
         },
         WordList {
             name: "Computers".to_string(),
             words: vec!["macbook", "windows", "keyboard", "monitor", "speaker"]
             .iter().map(|s| s.to_string()).collect(),
-        }  
+        },
+        WordList {
+            name: "Games".to_string(),
+            words: vec!["cult of the lamb", "another crabs treasure", "minecraft", "splatoon", "a hat in time"]
+            .iter().map(|s| s.to_string()).collect(),
+        }
     ];
 }
 
-// Type "cargo run" in terminal to run
+// Type "cargo run" in terminal to run, "cargo build" to test compile

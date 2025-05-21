@@ -40,8 +40,6 @@ I found these websites useful in developing this software:
 
 The following items I plan to fix, improve, and/or add to this project in the future:
 
-* [ ] Add in multiple word lists selection feature
-* [ ] Add additional words to current list & more word lists
 * [ ] Add in ability to create custom word lists
+* [ ] Add additional words to current list & more word lists
 * [ ] Finish documentation
-* [ ] Add in spaces in words
