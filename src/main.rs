@@ -1,5 +1,5 @@
 use std::{io}; // Obtain library for input/output
-
+use std::{thread, time}; // Sleep feature
 use rand::Rng; // Obtain library for random number generation
 
 // Define WordList structure
@@ -20,7 +20,7 @@ fn main() {
     let mut lives = 6;
 
     while program_active == true {
-        println!("o<-< RUSTMAN Main Menu >->o\n0) Quit program\n1) Start game ({})\n2) Word list settings\n3) Change allowed missed guesses", &word_list[chosen_word_list].name);
+        println!("o<-< RUSTMAN Main Menu >->o\n0) Quit program\n1) Start game ({}, {} missed allowed)\n2) Word list settings\n3) Change allowed missed guesses", &word_list[chosen_word_list].name, lives);
 
         let mut input = String::new();
 
@@ -55,7 +55,11 @@ fn main() {
 
 fn gameloop(lives: i32, chosen_word_list: usize, word_list: &Vec<WordList>) {
 
+    // Game wait timer
     println!("Starting game with word list theme '{}'...", &word_list[chosen_word_list].name);
+    thread::sleep(time::Duration::from_millis(3000));
+    clearscreen::clear().expect("failed to clear screen");
+
     let chosen_word = obtainword(&word_list[chosen_word_list].words);
     let mut activelives = lives;
     let mut guessed: Vec<char> = Vec::new();
@@ -192,7 +196,7 @@ fn changelives(mut lives: i32) -> i32 {
     clearscreen::clear().expect("failed to clear screen");
 
     println!("The current number of missed guesses before you lose the game is currently {}.\n", lives);
-    println!("How many missed guesses do you want to allow? (integer)");
+    println!("How many missed guesses do you want to allow? (positive integer below 26)");
     let mut proposed_lives = String::new();
     io::stdin().read_line(&mut proposed_lives).expect("Failed to read line");
     let mut lives_changed = false;
@@ -204,11 +208,11 @@ fn changelives(mut lives: i32) -> i32 {
     clearscreen::clear().expect("failed to clear screen");
 
     if lives_changed {
-        if proposed_lives.trim().parse::<i32>().unwrap_or(lives) < 25 {
+        if (proposed_lives.trim().parse::<i32>().unwrap_or(lives) < 26) && (proposed_lives.trim().parse::<i32>().unwrap_or(lives) > 0)  {
             lives = proposed_lives.trim().parse::<i32>().unwrap_or(lives);
             println!("Allowed missed guesses has been changed to {} for future games.\nPress ENTER to continue.", proposed_lives.trim());
         } else {
-            println!("Too big! Allowed missed guesses must not match or exceed the total length of the alphabet (26).\nPress ENTER to continue.")
+            println!("Prohibited number; allowed missed guesses must be more than 0 and not match or exceed the total length of the alphabet (26).\nPress ENTER to continue.")
         }
     } else {
         println!("That is not an acceptable number. Please try again with an integer.\nAllowed missed guesses remains at {}.\nPress ENTER to continue.", lives);
