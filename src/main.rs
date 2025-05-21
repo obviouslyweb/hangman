@@ -1,4 +1,4 @@
-use std::{io, thread::current}; // Obtain library for input/output
+use std::{io}; // Obtain library for input/output
 
 use rand::Rng; // Obtain library for random number generation
 
