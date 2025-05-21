@@ -43,3 +43,4 @@ The following items I plan to fix, improve, and/or add to this project in the fu
 * [ ] Add in ability to create custom word lists
 * [ ] Add additional words to current list & more word lists
 * [ ] Finish documentation
+* [ ] Allow early game end

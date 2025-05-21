@@ -14,13 +14,13 @@ fn main() {
     clearscreen::clear().expect("failed to clear screen");
 
     // Create necessary variables (word list, chosen word list, active program, lives, etc.)
-    let word_list = createwordlist();
+    let mut word_lists = createwordlist();
     let mut chosen_word_list = 0;
     let mut program_active = true;
     let mut lives = 6;
 
     while program_active == true {
-        println!("o<-< RUSTMAN Main Menu >->o\n0) Quit program\n1) Start game ({}, {} missed allowed)\n2) Word list settings\n3) Change allowed missed guesses", &word_list[chosen_word_list].name, lives);
+        println!("o<-< RUSTMAN Main Menu >->o\n0) Quit program\n1) Start game ({}, {} missed allowed)\n2) Word list settings\n3) Change allowed missed guesses", &word_lists[chosen_word_list].name, lives);
 
         let mut input = String::new();
 
@@ -39,10 +39,49 @@ fn main() {
             0 => program_active = false,
             1 => {
                 clearscreen::clear().expect("failed to clear screen");
-                gameloop(lives, chosen_word_list, &word_list)
+                gameloop(lives, chosen_word_list, &word_lists)
             }
             2 => {
-                chosen_word_list = changewords(chosen_word_list, &word_list);
+                loop {
+                    clearscreen::clear().expect("failed to clear screen");
+                    println!("The current selected word list is '{}'.", word_lists[chosen_word_list].name);
+                    print!("It includes the following words: ");
+                    for (i, word) in word_lists[chosen_word_list].words.iter().enumerate() {
+                        if i == word_lists[chosen_word_list].words.len() - 1 {
+                            println!("{}", word);
+                        } else {
+                            print!("{}, ", word);
+                        }
+                    }
+                    
+                    println!("\n0) Return to main menu\n1) Change word list");
+
+                    let mut input = String::new();
+
+                    io::stdin().read_line(&mut input).expect("Failed to read line");
+
+                    let menu_choice: i32 = match input.trim().parse() {
+                        Ok(num) => num,
+                        Err(_) => {
+                            clearscreen::clear().expect("failed to clear screen");
+                            println!("Invalid input. Please enter a number.\n");
+                            continue;
+                        }
+                    };
+
+                    match menu_choice {
+                        0 => break,
+                        1 => {
+                            chosen_word_list = changewords(chosen_word_list, &word_lists);
+                        }
+                        _ => {
+                            clearscreen::clear().expect("failed to clear screen");
+                            println!("Unacceptable input; please choose a menu option.\n");
+                        }
+                    }
+                }
+
+                clearscreen::clear().expect("failed to clear screen");
             }
             3 => lives = changelives(lives),
             _ => {
@@ -55,10 +94,10 @@ fn main() {
 
 fn gameloop(lives: i32, chosen_word_list: usize, word_list: &Vec<WordList>) {
 
-    // Game wait timer
-    println!("Starting game with word list theme '{}'...", &word_list[chosen_word_list].name);
-    thread::sleep(time::Duration::from_millis(3000));
-    clearscreen::clear().expect("failed to clear screen");
+    // Game wait timer (disabled)
+    // println!("Starting game with word list theme '{}'...", &word_list[chosen_word_list].name);
+    // thread::sleep(time::Duration::from_millis(3000));
+    // clearscreen::clear().expect("failed to clear screen");
 
     let chosen_word = obtainword(&word_list[chosen_word_list].words);
     let mut activelives = lives;
@@ -218,91 +257,59 @@ fn changelives(mut lives: i32) -> i32 {
         println!("That is not an acceptable number. Please try again with an integer.\nAllowed missed guesses remains at {}.\nPress ENTER to continue.", lives);
     }
 
+    // Press ENTER handler
     let mut empty = String::new();
     io::stdin().read_line(&mut empty).expect("Failed to read line");
-
-    clearscreen::clear().expect("failed to clear scrWeen");
+    clearscreen::clear().expect("failed to clear screen");
 
     return lives;
 }
 
 fn changewords(mut current_word_list: usize, word_lists: &Vec<WordList>) -> usize {
-    loop {
-        clearscreen::clear().expect("failed to clear screen");
-        println!("The current selected word list is '{}'.", word_lists[current_word_list].name);
-        print!("It includes the following words: ");
-        for (i, word) in word_lists[current_word_list].words.iter().enumerate() {
-            if i == word_lists[current_word_list].words.len() - 1 {
-                println!("{}", word);
-            } else {
-                print!("{}, ", word);
-            }
-        }
-        
-        println!("\n0) Return to main menu\n1) Change word list");
+    clearscreen::clear().expect("failed to clear screen");
 
-        let mut input = String::new();
+    println!("The following are all the lists you can use:\n");
 
-        io::stdin().read_line(&mut input).expect("Failed to read line");
-
-        let menu_choice: i32 = match input.trim().parse() {
-            Ok(num) => num,
-            Err(_) => {
-                clearscreen::clear().expect("failed to clear screen");
-                println!("Invalid input. Please enter a number.\n");
-                continue;
-            }
-        };
-
-        match menu_choice {
-            0 => break,
-            1 => {
-                clearscreen::clear().expect("failed to clear screen");
-
-                println!("The following are all the lists you can use:\n");
-
-                for (index, list) in word_lists.iter().enumerate() {
-                    print!("{}: {} | ", index + 1, list.name);
-                    for (i, word) in word_lists[index].words.iter().enumerate() {
-                    if i == word_lists[index].words.len() - 1 {
-                        print!("{}", word);
-                    } else {
-                        print!("{}, ", word);
-                    }
-                }
-                    println!();
-                }
-
-                println!("\nPlease input the number of the list you'd like to use.");
-
-                let mut new_list_input = String::new();
-
-                io::stdin().read_line(&mut new_list_input).expect("Failed to read line");
-
-                let list_choice: i32 = match new_list_input.trim().parse() {
-                    Ok(num) => num,
-                    Err(_) => {
-                        clearscreen::clear().expect("failed to clear screen");
-                        println!("Invalid input. Please enter a number.\n");
-                        continue;
-                    }
-                };
-
-                if list_choice > 0 && (list_choice as usize) <= word_lists.len() {
-                    let chosen_index = (list_choice - 1) as usize;
-                    println!("Chosen list: {}", word_lists[chosen_index].name);
-                    current_word_list = chosen_index;
-                } else {
-                    println!("Invalid selection; please choose a given index.");
-                }
-            }
-            _ => {
-                clearscreen::clear().expect("failed to clear screen");
-                println!("Unacceptable input; please choose a menu option.\n");
-            }
+    for (index, list) in word_lists.iter().enumerate() {
+        print!("{}: {} | ", index + 1, list.name);
+        for (i, word) in word_lists[index].words.iter().enumerate() {
+        if i == word_lists[index].words.len() - 1 {
+            print!("{}", word);
+        } else {
+            print!("{}, ", word);
         }
     }
+        println!();
+    }
 
+    println!("\nPlease input the number of the list you'd like to use.");
+
+    let mut new_list_input = String::new();
+
+    io::stdin().read_line(&mut new_list_input).expect("Failed to read line");
+
+    let list_choice: i32 = match new_list_input.trim().parse() {
+        Ok(num) => num,
+        Err(_) => {
+            clearscreen::clear().expect("failed to clear screen");
+            println!("Invalid input. Please enter a number.\n");
+            return current_word_list;
+        }
+    };
+
+    if list_choice > 0 && (list_choice as usize) <= word_lists.len() {
+        let chosen_index = (list_choice - 1) as usize;
+        clearscreen::clear().expect("failed to clear screen");
+        println!("Chosen word list has been changed to '{}'.\nPress ENTER to continue.", word_lists[chosen_index].name);
+        current_word_list = chosen_index;
+    } else {
+        clearscreen::clear().expect("failed to clear screen");
+        println!("Invalid selection; that index did not match any provided options.\nWord list remains as '{}'.\nPress ENTER to continue.", word_lists[current_word_list].name);
+    }
+
+    // Press ENTER handler
+    let mut empty = String::new();
+    io::stdin().read_line(&mut empty).expect("Failed to read line");
     clearscreen::clear().expect("failed to clear screen");
 
     return current_word_list;
