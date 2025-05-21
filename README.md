@@ -44,3 +44,4 @@ The following items I plan to fix, improve, and/or add to this project in the fu
 * [ ] Add additional words to current list & more word lists
 * [ ] Allow early game end
 * [ ] Add the ability to delete word lists
+* [ ] Add ability to save/load word lists
