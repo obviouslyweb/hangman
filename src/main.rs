@@ -143,7 +143,7 @@ fn gameloop(lives: i32, chosen_word_list: usize, word_list: &Vec<WordList>) {
 
         // Obtain user guess
         io::stdin().read_line(&mut guess).expect("Failed to read line");
-        let trimmed = guess.trim();
+        let trimmed = guess.trim().to_lowercase();
 
         if trimmed.len() != 1 {
             clearscreen::clear().expect("failed to clear screen");
@@ -398,7 +398,7 @@ fn addtowordlist(all_lists: &mut Vec<WordList>) {
             // Checks to ensure that the last check passed
             if allowed_phrase {
                 // Add word/phrase to the word list
-                words_to_add.push(trimmed.to_string());
+                words_to_add.push(trimmed.to_string().to_lowercase());
                 clearscreen::clear().expect("failed to clear screen");
             } else {
                 // Notify user that content wasn't allowed
