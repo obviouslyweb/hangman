@@ -11,7 +11,7 @@
 Steps to build and/or run the software:
 
 ### Using Executable (without Rust installed)
-1. [Download the latest build published on GitHub here.](https://github.com/obviouslyweb/rustman/releases/tag/releases)
+1. [Download the latest build published on GitHub here.](https://github.com/obviouslyweb/rustman/releases)
 2. Run `rustman.exe`. Windows may give you a warning as the program isn't signed; if so, press 'More info' and 'Run anyway' to proceed.
 
 ### Using Command Prompt / Terminal
