@@ -73,14 +73,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "hangman"
-version = "0.1.0"
-dependencies = [
- "clearscreen",
- "rand",
-]
-
-[[package]]
 name = "libc"
 version = "0.2.172"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -232,6 +224,14 @@ dependencies = [
  "libc",
  "linux-raw-sys",
  "windows-sys",
+]
+
+[[package]]
+name = "rustman"
+version = "0.1.0"
+dependencies = [
+ "clearscreen",
+ "rand",
 ]
 
 [[package]]
