@@ -6,7 +6,7 @@
 
 // Hangman Game created in Rust
 // Created by Connor Butterfield (TWC)
-// Part of a two-week sprint exploration project
+// Part of a two-week sprint exploration project to learn Rust
 
 // Define necessary libraries
 use std::{io};
