@@ -450,17 +450,17 @@ fn createwordlist() -> Vec<WordList> {
     return vec![
         WordList {
             name: "Fruits".to_string(),
-            words: vec!["apple", "banana", "pear", "pineapple", "grape", "blackberry", "guava", "peach", "orange"]
+            words: vec!["apple", "banana", "pear", "pineapple", "grape", "blackberry", "guava", "peach", "orange", "dragonfruit", "tomato"]
             .iter().map(|s| s.to_string()).collect(),
         },
         WordList {
             name: "Computers".to_string(),
-            words: vec!["macbook", "windows", "keyboard", "monitor", "speaker"]
+            words: vec!["macbook", "windows", "keyboard", "monitor", "speaker", "phone", "zephyrus", "microsoft", "nvidia", "button", "stack overflow"]
             .iter().map(|s| s.to_string()).collect(),
         },
         WordList {
             name: "Games".to_string(),
-            words: vec!["cult of the lamb", "another crabs treasure", "minecraft", "splatoon", "a hat in time"]
+            words: vec!["cult of the lamb", "another crabs treasure", "minecraft", "splatoon", "a hat in time", "the legend of zelda", "super mario odyssey", "risk of rain returns", "helldivers two", "mariokart", "sonic adventure"]
             .iter().map(|s| s.to_string()).collect(),
         }
     ];
