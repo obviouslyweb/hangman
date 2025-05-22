@@ -1,5 +1,16 @@
-use std::{io}; // Obtain library for input/output
-use rand::Rng; // Obtain library for random number generation
+//   ____   _   _  ____  _____  __  __     _     _   _ 
+//  |  _ \ | | | |/ ___||_   _||  \/  |   / \   | \ | |
+//  | |_) || | | |\___ \  | |  | |\/| |  / _ \  |  \| |
+//  |  _ < | |_| | ___) | | |  | |  | | / ___ \ | |\  |
+//  |_| \_\ \___/ |____/  |_|  |_|  |_|/_/   \_\|_| \_|
+
+// Hangman Game created in Rust
+// Created by Connor Butterfield (TWC)
+// Part of a two-week sprint exploration project
+
+// Define necessary libraries
+use std::{io};
+use rand::Rng;
 use clearscreen;
 
 // Define WordList structure
@@ -8,6 +19,7 @@ struct WordList {
     words: Vec<String>
 }
 
+// Main function
 fn main() {
 
     // Clear screen
@@ -454,4 +466,4 @@ fn createwordlist() -> Vec<WordList> {
     ];
 }
 
-// Type "cargo run" in terminal to run, "cargo build" to test compile
+// End of program
