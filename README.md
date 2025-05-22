@@ -52,8 +52,6 @@ I found these websites useful in developing this software:
 
 The following items I plan to fix, improve, and/or add to this project in the future:
 
-* [ ] Add in capitals handling (disallow capital letters for lists & game input)
-* [ ] Add additional words to current list & more word lists
 * [ ] Add mid-game quit option
 * [ ] Add the ability to delete word lists
 * [ ] Save/load functionality for saving word lists & current lives
