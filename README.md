@@ -39,9 +39,10 @@ Instructions for using the software:
 
 To recreate the development environment, you need the following software and/or libraries with the specified versions:
 
-* First thing here
-*
-*
+* [Visual Studio Code](https://code.visualstudio.com/)
+* [rustup - Rust Installer (64-bit)](https://www.rust-lang.org/tools/install)
+* [Microsoft C++ Build Tools](https://visualstudio.microsoft.com/visual-cpp-build-tools/)
+* [rust-analyzer - VSCode Extension](https://marketplace.visualstudio.com/items?itemName=rust-lang.rust-analyzer)
 
 ## Useful Websites to Learn More
 
