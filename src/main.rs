@@ -460,7 +460,12 @@ fn createwordlist() -> Vec<WordList> {
         },
         WordList {
             name: "Games".to_string(),
-            words: vec!["cult of the lamb", "another crabs treasure", "minecraft", "splatoon", "a hat in time", "the legend of zelda", "super mario odyssey", "risk of rain returns", "helldivers two", "mariokart", "sonic adventure"]
+            words: vec!["cult of the lamb", "another crabs treasure", "minecraft", "splatoon", "a hat in time", "the legend of zelda", "super mario odyssey", "risk of rain returns", "helldivers two", "mariokart", "sonic adventure", "balatro"]
+            .iter().map(|s| s.to_string()).collect(),
+        },
+        WordList {
+            name: "Money & Business".to_string(),
+            words: vec!["money", "dollar bill", "stock exchange", "coins", "gold bars", "scrooge mcduck", "nasdaq", "currency", "conversion rate", "shareholders"]
             .iter().map(|s| s.to_string()).collect(),
         }
     ];
